@@ -201,7 +201,11 @@
             }]
         }
     };
-    const TABS = React.useMemo(() => {
+    
+
+    function Main() {
+
+        const TABS = React.useMemo(() => {
     const extendedItems = [];
     for (let i = 0; i < 6; ++i) {
         extendedItems.push(...BASE_TABS.all.items);
@@ -209,8 +213,6 @@
     return { ...BASE_TABS, all: { ...BASE_TABS.all, items: [...BASE_TABS.all.items, ...extendedItems] }};
 }, []);
     const TABS_KEYS = Object.keys(TABS);
-
-    function Main() {
         const ref = React.useRef();
         const initedRef = React.useRef(false);
         const [activeTab, setActiveTab] = React.useState('');
