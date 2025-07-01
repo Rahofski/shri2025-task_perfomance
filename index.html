@@ -6,7 +6,7 @@
           content="width=device-width, initial-scale=1.0">
     <title>Яндекс.Дом</title>
     <link rel="preload" as="font" href="assets/lato.woff2" type="font/woff2" crossorigin="anonymous">
-    <script src="vendors/react-with-dom.js"></script>
+    <script src="vendors/react-with-dom.min.js"></script>
     <link rel="stylesheet" type="text/css" href="reset.css">
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
@@ -94,7 +94,7 @@
         </li>;
     }
 
-    const BASE_TABS = {
+    const TABS = {
         all: {
             title: 'Все',
             items: [{
@@ -201,18 +201,12 @@
             }]
         }
     };
-    
+    for (let i = 0; i < 6; ++i) {
+        TABS.all.items = [...TABS.all.items, ...TABS.all.items];
+    }
+    const TABS_KEYS = Object.keys(TABS);
 
     function Main() {
-
-        const TABS = React.useMemo(() => {
-    const extendedItems = [];
-    for (let i = 0; i < 6; ++i) {
-        extendedItems.push(...BASE_TABS.all.items);
-    }
-    return { ...BASE_TABS, all: { ...BASE_TABS.all, items: [...BASE_TABS.all.items, ...extendedItems] }};
-}, []);
-    const TABS_KEYS = Object.keys(TABS);
         const ref = React.useRef();
         const initedRef = React.useRef(false);
         const [activeTab, setActiveTab] = React.useState('');
@@ -229,10 +223,10 @@
             setActiveTab(event.target.value);
         };
 
-        const [sizes, setSizes] = React.useState([]);
-        const onSize = React.useCallback(size => {
-            setSizes(prev => [...prev, size]);
-        }, []);
+        let sizes = [];
+        const onSize = size => {
+            sizes = [...sizes, size];
+        };
 
         React.useEffect(() => {
             const sumWidth = sizes.reduce((acc, item) => acc + item.width, 0);
@@ -242,7 +236,7 @@
             if (newHasRightScroll !== hasRightScroll) {
                 setHasRightScroll(newHasRightScroll);
             }
-        }, [sizes]);
+        });
 
         const onArrowCLick = () => {
             const scroller = ref.current.querySelector('.section__panel:not(.section__panel_hidden)');
